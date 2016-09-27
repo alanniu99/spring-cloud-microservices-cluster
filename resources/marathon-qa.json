@@ -363,7 +363,10 @@
 					"healthChecks": [
 					],
 					"labels": {
-					}
+					"HAPROXY_GROUP": "external",
+					"HAPROXY_0_VHOST": "mesos-slave1",
+					"HAPROXY_0_MODE": "http"
+				  }
 				}
 			]
 		}
