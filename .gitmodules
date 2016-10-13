@@ -10,3 +10,12 @@
 [submodule "ui-search"]
 	path = ui-search
 	url = https://10.10.0.50:9443/moviemicorservices/ui-search
+[submodule "api-gateway-microservice"]
+	path = api-gateway-microservice
+	url = https://10.10.0.50:9443/moviemicorservices/api-gateway-microservice.git
+[submodule "config-microservice"]
+	path = config-microservice
+	url = https://10.10.0.50:9443/moviemicorservices/config-microservice.git
+[submodule "discovery-microservice"]
+	path = discovery-microservice
+	url = https://10.10.0.50:9443/moviemicorservices/discovery-microservice.git
