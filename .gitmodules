@@ -1,12 +1,3 @@
-[submodule "discovery-microservice"]
-	path = discovery-microservice
-	url = https://10.10.0.50:9443/moviemicorservices/discovery-microservice
-[submodule "api-gateway-microservice"]
-	path = api-gateway-microservice
-	url = https://10.10.0.50:9443/moviemicorservices/api-gateway-microservice
-[submodule "config-microservice"]
-	path = config-microservice
-	url = https://10.10.0.50:9443/moviemicorservices/config-microservice
 [submodule "user-microservice"]
 	path = user-microservice
 	url = https://10.10.0.50:9443/moviemicorservices/user-microservice
