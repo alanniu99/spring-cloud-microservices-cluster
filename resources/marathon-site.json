@@ -48,6 +48,11 @@
 					"mem": 1500,
 					"disk": 0,
 					"instances": 1,
+					 "labels": {
+					    "HAPROXY_GROUP": "external",
+					    "HAPROXY_0_VHOST": "mesos-slave1",
+					    "HAPROXY_0_MODE": "http"
+					  },
 					"container": {
 						"docker": {
 							"image": "dockerniu/ui-search",
@@ -64,7 +69,8 @@
 							],
 							"portMappings": [
 								{
-									"containerPort": 1111,									
+									"containerPort": 1111,
+									"servicePort": 8080,									
 									"protocol": "tcp",
 									"name": null
 								}
@@ -77,9 +83,8 @@
 					},
 					 "dependencies": ["movie","rating","user"],
 					"healthChecks": [
-					],
-					"labels": {
-					}
+					]
+					
 				},
 				{
 					"id": "rating",
