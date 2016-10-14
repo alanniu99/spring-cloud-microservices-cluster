@@ -212,13 +212,16 @@
 							],
 							"portMappings": [
 								{
-									"containerPort": 9000,
+									"containerPort": 9006,
 									"protocol": "tcp",
 									"name": null
 								}
 							]
 						},
-						"type": "DOCKER"
+						"type": "DOCKER",
+						"env": {
+							"SPRING_PROFILES_ACTIVE": "docker"
+						}
 					},
 					"healthChecks": [
 					],
