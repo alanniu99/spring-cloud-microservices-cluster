@@ -234,7 +234,7 @@
 					"instances": 1,
 					"labels": {
 						"HAPROXY_GROUP": "external",
-						"HAPROXY_0_VHOST": "mesos-slave1",
+						"HAPROXY_0_VHOST": "mesos-slave2",
 						"HAPROXY_0_MODE": "http"
 					},
 					"container": {
