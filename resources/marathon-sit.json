@@ -1,9 +1,193 @@
 {
-	"id": "/",
+	"id": "/movie-sit",
 	"groups": [
 		{
-			"id": "movies-sit",
-	
+			"id": "database",
+			"apps": [
+				{
+					"id": "neo4j",
+					"cmd": null,
+					"cpus": 0.2,
+					"mem": 1000,
+					"disk": 0,
+					"instances": 1,
+					"container": {
+						"type": "DOCKER",
+						"volumes": [
+							{
+								"containerPath": "/data",
+								"hostPath": "/home/devops/neo4j/data",
+								"mode": "RW"
+							}
+						],
+						"docker": {
+							"image": "neo4j",
+							"network": "BRIDGE",
+							"portMappings": [
+								{
+									"containerPort": 7474,
+									"protocol": "tcp",
+									"labels": {
+									}
+								},
+								{
+									"containerPort": 7687,
+									"protocol": "tcp",
+									"labels": {
+									}
+								}
+							],
+							"privileged": false,
+							"parameters": [
+								{
+									"key": "net",
+									"value": "microservice"
+								},
+								{
+									"key": "net-alias",
+									"value": "neo4jdb"
+								}
+							],
+							"forcePullImage": false
+						}
+					}
+				}
+			]
+		},
+		{
+			"id": "spring-service",
+			"apps": [
+				{
+					"id": "discovery",
+					"cmd": null,
+					"cpus": 0.5,
+					"mem": 1000,
+					"disk": 0,
+					"instances": 1,
+					"container": {
+						"docker": {
+							"image": "dockerniu/discovery-microservice",
+							"network": "BRIDGE",
+							"parameters": [
+								{
+									"key": "hostname",
+									"value": "discovery"
+								},
+								{
+									"key": "net",
+									"value": "microservice"
+								},
+								{
+									"key": "net-alias",
+									"value": "discovery"
+								}
+							],
+							"portMappings": [
+								{
+									"containerPort": 8761,
+									"protocol": "tcp",
+									"name": null
+								}
+							]
+						},
+						"type": "DOCKER",
+						"env": {
+							"SPRING_PROFILES_ACTIVE": "docker"
+						}
+					}
+				},
+				{
+					"id": "config",
+					"cmd": null,
+					"cpus": 0.2,
+					"mem": 1000,
+					"disk": 0,
+					"instances": 1,
+					"container": {
+						"docker": {
+							"image": "dockerniu/config-microservice",
+							"network": "BRIDGE",
+							"parameters": [
+								{
+									"key": "hostname",
+									"value": "configserver"
+								},
+								{
+									"key": "net",
+									"value": "microservice"
+								},
+								{
+									"key": "net-alias",
+									"value": "configServer"
+								}
+							],
+							"portMappings": [
+								{
+									"containerPort": 8888,
+									"protocol": "tcp",
+									"name": null
+								}
+							]
+						},
+						"type": "DOCKER",
+						"env": {
+							"SPRING_PROFILES_ACTIVE": "docker"
+						}
+					},
+					"healthChecks": [
+					],
+					"labels": {
+					}
+				},
+				{
+					"id": "gateway",
+					"cmd": null,
+					"cpus": 0.3,
+					"mem": 2000,
+					"disk": 0,
+					"instances": 1,
+					"container": {
+						"docker": {
+							"image": "dockerniu/api-gateway-microservice",
+							"network": "BRIDGE",
+							"parameters": [
+								{
+									"key": "net",
+									"value": "microservice"
+								},
+								{
+									"key": "net-alias",
+									"value": "gateway"
+								}
+							],
+							"portMappings": [
+								{
+									"containerPort": 10000,
+									"protocol": "tcp",
+									"name": null
+								}
+							]
+						},
+						"type": "DOCKER",
+						"env": {
+							"SPRING_PROFILES_ACTIVE": "docker"
+						}
+					},
+					"healthChecks": [
+					],
+					"labels": {
+						"HAPROXY_GROUP": "external",
+						"HAPROXY_0_VHOST": "mesos-slave1",
+						"HAPROXY_0_MODE": "http"
+					}
+				}
+			]
+		},
+		{
+			"id": "movies",
+			"dependencies": [
+				"spring-service"
+			],
 			"apps": [
 				{
 					"id": "movie",
@@ -48,11 +232,11 @@
 					"mem": 1500,
 					"disk": 0,
 					"instances": 1,
-					 "labels": {
-					    "HAPROXY_GROUP": "external",
-					    "HAPROXY_0_VHOST": "mesos-slave1",
-					    "HAPROXY_0_MODE": "http"
-					  },
+					"labels": {
+						"HAPROXY_GROUP": "external",
+						"HAPROXY_0_VHOST": "mesos-slave1",
+						"HAPROXY_0_MODE": "http"
+					},
 					"container": {
 						"docker": {
 							"image": "dockerniu/ui-search",
@@ -70,7 +254,7 @@
 							"portMappings": [
 								{
 									"containerPort": 1111,
-									"servicePort": 8080,									
+									"servicePort": 8080,
 									"protocol": "tcp",
 									"name": null
 								}
@@ -81,10 +265,13 @@
 							"SPRING_PROFILES_ACTIVE": "docker"
 						}
 					},
-					 "dependencies": ["movie","rating","user"],
+					"dependencies": [
+						"movie",
+						"rating",
+						"user"
+					],
 					"healthChecks": [
 					]
-					
 				},
 				{
 					"id": "rating",
@@ -97,7 +284,7 @@
 						"docker": {
 							"image": "dockerniu/rating-microservice",
 							"network": "BRIDGE",
-							"parameters": [							
+							"parameters": [
 								{
 									"key": "net",
 									"value": "microservice"
