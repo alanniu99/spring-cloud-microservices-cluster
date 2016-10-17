@@ -265,11 +265,6 @@
 							"SPRING_PROFILES_ACTIVE": "docker"
 						}
 					},
-					"dependencies": [
-						"movie",
-						"rating",
-						"user"
-					],
 					"healthChecks": [
 					]
 				},
