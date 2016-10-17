@@ -10,7 +10,7 @@
 					"cpus": 0.2,
 					"mem": 1000,
 					"disk": 0,
-					"instances": 1,
+					"instances": 0,
 					"container": {
 						"type": "DOCKER",
 						"volumes": [
@@ -68,11 +68,7 @@
 						"docker": {
 							"image": "dockerniu/discovery-microservice",
 							"network": "BRIDGE",
-							"parameters": [
-								{
-									"key": "hostname",
-									"value": "discovery"
-								},
+							"parameters": [								
 								{
 									"key": "net",
 									"value": "microservice"
