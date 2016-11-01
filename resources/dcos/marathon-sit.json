@@ -1,0 +1,355 @@
+{
+	"id": "/movies-sit",
+	"groups": [
+		{
+			"id": "database",
+			"apps": [
+				{
+					"id": "neo4j",
+					"cmd": null,
+					"cpus": 0.2,
+					"mem": 1000,
+					"disk": 0,
+					"instances": 0,
+					"container": {
+						"type": "DOCKER",
+						"volumes": [
+							{
+								"containerPath": "/data",
+								"hostPath": "/home/devops/neo4j/data",
+								"mode": "RW"
+							}
+						],
+						"docker": {
+							"image": "neo4j",
+							"network": "USER",
+							"portMappings": [
+								{
+									"containerPort": 7474,
+									"protocol": "tcp",
+									"labels": {
+									}
+								},
+								{
+									"containerPort": 7687,
+									"protocol": "tcp",
+									"labels": {
+									}
+								}
+							],
+							"privileged": false,
+							"parameters": [
+								
+								{
+									"key": "net-alias",
+									"value": "neo4jdb"
+								}
+							],
+							"forcePullImage": false
+						}
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
+				}
+			]
+		},
+		{
+			"id": "spring-service",
+			"apps": [
+				{
+					"id": "discovery",
+					"cmd": null,
+					"cpus": 0.5,
+					"mem": 1000,
+					"disk": 0,
+					"instances": 1,
+					"container": {
+						"docker": {
+							"image": "dockerniu/discovery-microservice",
+							"network": "USER",
+							"parameters": [
+								{
+									"key": "hostname",
+									"value": "discovery"
+								},
+								
+								{
+									"key": "net-alias",
+									"value": "discovery"
+								}
+							],
+							"portMappings": [
+								{
+									"containerPort": 8761,
+									"protocol": "tcp",
+									"name": null
+								}
+							]
+						},
+						"type": "DOCKER",
+						"env": {
+							"SPRING_PROFILES_ACTIVE": "docker"
+						}
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
+				},
+				{
+					"id": "config",
+					"cmd": null,
+					"cpus": 0.2,
+					"mem": 1000,
+					"disk": 0,
+					"instances": 1,
+					"container": {
+						"docker": {
+							"image": "dockerniu/config-microservice",
+							"network": "USER",
+							"parameters": [
+								{
+									"key": "hostname",
+									"value": "configserver"
+								},
+								
+								{
+									"key": "net-alias",
+									"value": "configServer"
+								}
+							],
+							"portMappings": [
+								{
+									"containerPort": 8888,
+									"protocol": "tcp",
+									"name": null
+								}
+							]
+						},
+						"type": "DOCKER",
+						"env": {
+							"SPRING_PROFILES_ACTIVE": "docker"
+						}
+					},
+					"healthChecks": [
+					],
+					"labels": {
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
+				},
+				{
+					"id": "gateway",
+					"cmd": null,
+					"cpus": 0.3,
+					"mem": 2000,
+					"disk": 0,
+					"instances": 1,
+					"container": {
+						"docker": {
+							"image": "dockerniu/api-gateway-microservice",
+							"network": "USER",
+							"parameters": [
+								
+								{
+									"key": "net-alias",
+									"value": "gateway"
+								}
+							],
+							"portMappings": [
+								{
+									"containerPort": 10000,
+									"protocol": "tcp",
+									"name": null
+								}
+							]
+						},
+						"type": "DOCKER",
+						"env": {
+							"SPRING_PROFILES_ACTIVE": "docker"
+						}
+					},
+					"healthChecks": [
+					],
+					"labels": {
+						"HAPROXY_GROUP": "external",
+						"HAPROXY_0_VHOST": "mesos-slave1",
+						"HAPROXY_0_MODE": "http"
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
+				}
+			]
+		},
+		{
+			"id": "movies",
+			"dependencies": [
+				"spring-service"
+			],
+			"apps": [
+				{
+					"id": "movie",
+					"cmd": null,
+					"cpus": 0.2,
+					"mem": 1500,
+					"disk": 0,
+					"instances": 1,
+					"container": {
+						"docker": {
+							"image": "dockerniu/movie-microservice",
+							"network": "USER",
+							"parameters": [
+								
+								{
+									"key": "net-alias",
+									"value": "movie"
+								}
+							],
+							"portMappings": [
+								{
+									"containerPort": 9006,
+									"protocol": "tcp",
+									"name": null
+								}
+							]
+						},
+						"type": "DOCKER",
+						"env": {
+							"SPRING_PROFILES_ACTIVE": "docker"
+						}
+					},
+					"healthChecks": [
+					],
+					"labels": {
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
+				},
+				{
+					"id": "moviesui",
+					"cmd": null,
+					"cpus": 0.3,
+					"mem": 1500,
+					"disk": 0,
+					"instances": 1,
+					"labels": {
+						"HAPROXY_GROUP": "external",
+						"HAPROXY_0_VHOST": "dcos-slave5",
+						"HAPROXY_0_MODE": "http"
+					},
+					"container": {
+						"docker": {
+							"image": "dockerniu/ui-search",
+							"network": "USER",
+							"parameters": [
+							
+								{
+									"key": "net-alias",
+									"value": "moviesui"
+								}
+							],
+							"portMappings": [
+								{
+									"containerPort": 1111,
+									"servicePort": 80,
+									"protocol": "tcp",
+									"name": null
+								}
+							]
+						},
+						"type": "DOCKER",
+						"env": {
+							"SPRING_PROFILES_ACTIVE": "docker"
+						}
+					},
+					"healthChecks": [
+					],
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
+				},
+				{
+					"id": "rating",
+					"cmd": null,
+					"cpus": 0.3,
+					"mem": 1500,
+					"disk": 0,
+					"instances": 1,
+					"container": {
+						"docker": {
+							"image": "dockerniu/rating-microservice",
+							"network": "USER",
+							"parameters": [
+								
+								{
+									"key": "net-alias",
+									"value": "rating"
+								}
+							],
+							"portMappings": [
+								{
+									"containerPort": 9004,
+									"protocol": "tcp",
+									"name": null
+								}
+							]
+						},
+						"type": "DOCKER",
+						"env": {
+							"SPRING_PROFILES_ACTIVE": "docker"
+						}
+					},
+					"healthChecks": [
+					],
+					"labels": {
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
+				},
+				{
+					"id": "user",
+					"cmd": null,
+					"cpus": 0.3,
+					"mem": 1500,
+					"disk": 0,
+					"instances": 1,
+					"container": {
+						"docker": {
+							"image": "dockerniu/user-microservice",
+							"network": "USER",
+							"parameters": [
+								
+								{
+									"key": "net-alias",
+									"value": "user"
+								}
+							],
+							"portMappings": [
+								{
+									"containerPort": 9000,
+									"protocol": "tcp",
+									"name": null
+								}
+							]
+						},
+						"type": "DOCKER",
+						"env": {
+							"SPRING_PROFILES_ACTIVE": "docker"
+						}
+					},
+					"healthChecks": [
+					],
+					"labels": {
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
+				}
+			]
+		}
+	]
+}
