@@ -120,7 +120,7 @@
 									"protocol": "tcp",
 									"labels": {
 											"VIP_0": "/configServer:8888"
-										  }
+										  },
 									"name": null
 								}
 							]
