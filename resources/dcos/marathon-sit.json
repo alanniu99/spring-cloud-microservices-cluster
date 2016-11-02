@@ -28,12 +28,14 @@
 									"containerPort": 7474,
 									"protocol": "tcp",
 									"labels": {
+									 "VIP_0": "/neo4jdb:7474"
 									}
 								},
 								{
 									"containerPort": 7687,
 									"protocol": "tcp",
 									"labels": {
+									    "VIP_1": "/neo4jdb:8761"
 									}
 								}
 							],
@@ -69,10 +71,6 @@
 							"image": "dockerniu/discovery-microservice",
 							"network": "USER",
 							"parameters": [
-								{
-									"key": "hostname",
-									"value": "discovery"
-								},
 								
 								{
 									"key": "net-alias",
@@ -83,6 +81,9 @@
 								{
 									"containerPort": 8761,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/discovery:8761"
+										  },
 									"name": null
 								}
 							]
@@ -107,12 +108,7 @@
 						"docker": {
 							"image": "dockerniu/config-microservice",
 							"network": "USER",
-							"parameters": [
-								{
-									"key": "hostname",
-									"value": "configserver"
-								},
-								
+							"parameters": [																
 								{
 									"key": "net-alias",
 									"value": "configServer"
@@ -122,6 +118,9 @@
 								{
 									"containerPort": 8888,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/configServer:8888"
+										  }
 									"name": null
 								}
 							]
@@ -161,6 +160,9 @@
 								{
 									"containerPort": 10000,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/gateway:10000"
+										  },
 									"name": null
 								}
 							]
@@ -211,6 +213,9 @@
 								{
 									"containerPort": 9006,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/movie:9006"
+										  },
 									"name": null
 								}
 							]
@@ -256,6 +261,9 @@
 									"containerPort": 1111,
 									"servicePort": 80,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/moviesui:1111"
+										  },
 									"name": null
 								}
 							]
@@ -293,6 +301,9 @@
 								{
 									"containerPort": 9004,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/rating:9004"
+										  },
 									"name": null
 								}
 							]
@@ -332,6 +343,9 @@
 								{
 									"containerPort": 9000,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/user:9000"
+										  },
 									"name": null
 								}
 							]
