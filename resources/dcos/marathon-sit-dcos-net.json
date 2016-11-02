@@ -22,27 +22,26 @@
 						],
 						"docker": {
 							"image": "neo4j",
-							"network": "BRIDGE",
+							"network": "USER",
 							"portMappings": [
 								{
 									"containerPort": 7474,
 									"protocol": "tcp",
 									"labels": {
+									 "VIP_0": "/neo4jdb:7474"
 									}
 								},
 								{
 									"containerPort": 7687,
 									"protocol": "tcp",
 									"labels": {
+									    "VIP_1": "/neo4jdb:8761"
 									}
 								}
 							],
 							"privileged": false,
 							"parameters": [
-								{
-									"key": "net",
-									"value": "microservice"
-								},
+								
 								{
 									"key": "net-alias",
 									"value": "neo4jdb"
@@ -50,7 +49,10 @@
 							],
 							"forcePullImage": false
 						}
-					}
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
 				}
 			]
 		},
@@ -67,16 +69,9 @@
 					"container": {
 						"docker": {
 							"image": "dockerniu/discovery-microservice",
-							"network": "BRIDGE",
+							"network": "USER",
 							"parameters": [
-								{
-									"key": "hostname",
-									"value": "discovery"
-								},
-								{
-									"key": "net",
-									"value": "microservice"
-								},
+								
 								{
 									"key": "net-alias",
 									"value": "discovery"
@@ -86,6 +81,9 @@
 								{
 									"containerPort": 8761,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/discovery:8761"
+										  },
 									"name": null
 								}
 							]
@@ -94,7 +92,10 @@
 						"env": {
 							"SPRING_PROFILES_ACTIVE": "docker"
 						}
-					}
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
 				},
 				{
 					"id": "config",
@@ -106,16 +107,8 @@
 					"container": {
 						"docker": {
 							"image": "dockerniu/config-microservice",
-							"network": "BRIDGE",
-							"parameters": [
-								{
-									"key": "hostname",
-									"value": "configserver"
-								},
-								{
-									"key": "net",
-									"value": "microservice"
-								},
+							"network": "USER",
+							"parameters": [																
 								{
 									"key": "net-alias",
 									"value": "configServer"
@@ -125,6 +118,9 @@
 								{
 									"containerPort": 8888,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/configServer:8888"
+										  },
 									"name": null
 								}
 							]
@@ -137,7 +133,10 @@
 					"healthChecks": [
 					],
 					"labels": {
-					}
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
 				},
 				{
 					"id": "gateway",
@@ -149,12 +148,9 @@
 					"container": {
 						"docker": {
 							"image": "dockerniu/api-gateway-microservice",
-							"network": "BRIDGE",
+							"network": "USER",
 							"parameters": [
-								{
-									"key": "net",
-									"value": "microservice"
-								},
+								
 								{
 									"key": "net-alias",
 									"value": "gateway"
@@ -164,6 +160,9 @@
 								{
 									"containerPort": 10000,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/gateway:10000"
+										  },
 									"name": null
 								}
 							]
@@ -177,9 +176,12 @@
 					],
 					"labels": {
 						"HAPROXY_GROUP": "external",
-						"HAPROXY_0_VHOST": "dcos-slave5",
+						"HAPROXY_0_VHOST": "mesos-slave1",
 						"HAPROXY_0_MODE": "http"
-					}
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
 				}
 			]
 		},
@@ -199,12 +201,9 @@
 					"container": {
 						"docker": {
 							"image": "dockerniu/movie-microservice",
-							"network": "BRIDGE",
+							"network": "USER",
 							"parameters": [
-								{
-									"key": "net",
-									"value": "microservice"
-								},
+								
 								{
 									"key": "net-alias",
 									"value": "movie"
@@ -214,6 +213,9 @@
 								{
 									"containerPort": 9006,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/movie:9006"
+										  },
 									"name": null
 								}
 							]
@@ -226,7 +228,10 @@
 					"healthChecks": [
 					],
 					"labels": {
-					}
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
 				},
 				{
 					"id": "moviesui",
@@ -243,12 +248,9 @@
 					"container": {
 						"docker": {
 							"image": "dockerniu/ui-search",
-							"network": "BRIDGE",
+							"network": "USER",
 							"parameters": [
-								{
-									"key": "net",
-									"value": "microservice"
-								},
+							
 								{
 									"key": "net-alias",
 									"value": "moviesui"
@@ -259,6 +261,9 @@
 									"containerPort": 1111,
 									"servicePort": 80,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/moviesui:1111"
+										  },
 									"name": null
 								}
 							]
@@ -269,7 +274,10 @@
 						}
 					},
 					"healthChecks": [
-					]
+					],
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
 				},
 				{
 					"id": "rating",
@@ -281,12 +289,9 @@
 					"container": {
 						"docker": {
 							"image": "dockerniu/rating-microservice",
-							"network": "BRIDGE",
+							"network": "USER",
 							"parameters": [
-								{
-									"key": "net",
-									"value": "microservice"
-								},
+								
 								{
 									"key": "net-alias",
 									"value": "rating"
@@ -296,6 +301,9 @@
 								{
 									"containerPort": 9004,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/rating:9004"
+										  },
 									"name": null
 								}
 							]
@@ -308,7 +316,10 @@
 					"healthChecks": [
 					],
 					"labels": {
-					}
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
 				},
 				{
 					"id": "user",
@@ -320,12 +331,9 @@
 					"container": {
 						"docker": {
 							"image": "dockerniu/user-microservice",
-							"network": "BRIDGE",
+							"network": "USER",
 							"parameters": [
-								{
-									"key": "net",
-									"value": "microservice"
-								},
+								
 								{
 									"key": "net-alias",
 									"value": "user"
@@ -335,6 +343,9 @@
 								{
 									"containerPort": 9000,
 									"protocol": "tcp",
+									"labels": {
+											"VIP_0": "/user:9000"
+										  },
 									"name": null
 								}
 							]
@@ -347,7 +358,10 @@
 					"healthChecks": [
 					],
 					"labels": {
-					}
+					},
+					"ipAddress": {
+                        "networkName": "dcos"
+                    }
 				}
 			]
 		}
