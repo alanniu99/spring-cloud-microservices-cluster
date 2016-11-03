@@ -177,7 +177,7 @@
 					],
 					"labels": {
 						"HAPROXY_GROUP": "external",
-						"HAPROXY_0_VHOST": "dcos-slave5",
+						"HAPROXY_0_VHOST": "10.10.60.25",
 						"HAPROXY_0_MODE": "http"
 					}
 				}
@@ -237,7 +237,7 @@
 					"instances": 1,
 					"labels": {
 						"HAPROXY_GROUP": "external",
-						"HAPROXY_0_VHOST": "dcos-slave5",
+						"HAPROXY_0_VHOST": "10.10.60.25",
 						"HAPROXY_0_MODE": "http"
 					},
 					"container": {
