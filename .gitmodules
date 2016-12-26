@@ -1,21 +1,21 @@
-[submodule "user-microservice"]
-	path = user-microservice
-	url = https://10.10.0.50:9443/moviemicorservices/user-microservice
-[submodule "rating-microservice"]
-	path = rating-microservice
-	url = https://10.10.0.50:9443/moviemicorservices/rating-microservice
 [submodule "movie-microservice"]
 	path = movie-microservice
-	url = https://10.10.0.50:9443/moviemicorservices/movie-microservice
+	url = https://github.com/alanniu99/movie-microservice.git
+[submodule "user-microservice"]
+	path = user-microservice
+	url = https://github.com/alanniu99/user-microservice.git
 [submodule "ui-search"]
 	path = ui-search
-	url = https://10.10.0.50:9443/moviemicorservices/ui-search
-[submodule "api-gateway-microservice"]
-	path = api-gateway-microservice
-	url = https://10.10.0.50:9443/moviemicorservices/api-gateway-microservice.git
-[submodule "config-microservice"]
-	path = config-microservice
-	url = https://10.10.0.50:9443/moviemicorservices/config-microservice.git
+	url = https://github.com/alanniu99/ui-search.git
+[submodule "rating-microservice"]
+	path = rating-microservice
+	url = https://github.com/alanniu99/rating-microservice.git
 [submodule "discovery-microservice"]
 	path = discovery-microservice
-	url = https://10.10.0.50:9443/moviemicorservices/discovery-microservice.git
+	url = https://github.com/alanniu99/discovery-microservice.git
+[submodule "config-microservice"]
+	path = config-microservice
+	url = https://github.com/alanniu99/config-microservice.git
+[submodule "api-gateway-microservice"]
+	path = api-gateway-microservice
+	url = https://github.com/alanniu99/api-gateway-microservice.git
